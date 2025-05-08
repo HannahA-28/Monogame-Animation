@@ -5,8 +5,20 @@ using Microsoft.Xna.Framework.Input;
 
 namespace Monogame_Animation
 {
+    enum Screen
+    {
+        Intro,
+        TribbleYard,
+        EndScreen
+    }
+
+
     public class Game1 : Game
     {
+        
+
+        Screen screen;
+
         private GraphicsDeviceManager _graphics;
         private SpriteBatch _spriteBatch;
 
@@ -33,6 +45,12 @@ namespace Monogame_Animation
 
         Color backGroundColor;
 
+        MouseState mouseState;
+
+        Texture2D tribbleIntroTexture;
+        Texture2D endScreenTexture;
+
+        SpriteFont titleFont;
 
         public Game1()
         {
@@ -64,6 +82,8 @@ namespace Monogame_Animation
             blondeHairColor = Color.White;
             brownHairColor = Color.White;
 
+            screen = Screen.Intro;
+
             base.Initialize();
         }
 
@@ -80,6 +100,12 @@ namespace Monogame_Animation
 
             orangeHairtexture = Content.Load<Texture2D>("orangeHair");
 
+            tribbleIntroTexture = Content.Load<Texture2D>("tribbleIntro");
+
+            endScreenTexture = Content.Load<Texture2D>("EndScreen");
+
+            titleFont = Content.Load<SpriteFont>("Titlefont");
+
             // TODO: use this.Content to load your game content here
         }
 
@@ -89,59 +115,78 @@ namespace Monogame_Animation
                 Exit();
 
             // TODO: Add your update logic here
+            
+            
 
-            greyHairRect.X += (int)greyHairSpeed.X;
-            if (greyHairRect.Right >= window.Width || greyHairRect.Left <= 0)
-            {
-                greyHairSpeed.X *= -1;
-            }
-            if (greyHairRect.Bottom >= window.Height || greyHairRect.Top <= 0)
-            {
-                greyHairSpeed.Y *= -1;
-            }
-            greyHairRect.Y += (int)greyHairSpeed.Y;
+            mouseState = Mouse.GetState();
 
-            blondeHairRect.X += (int)blondeHairSpeed.X;
-            if (blondeHairRect.Right >= window.Width || blondeHairRect.Left <= 0)
+            if (screen == Screen.Intro)
             {
-                blondeHairSpeed.X *= -1;
-                backGroundColor = Color.MediumPurple;
-                blondeHairColor = Color.LightSeaGreen;
+                if (mouseState.LeftButton == ButtonState.Pressed)
+                    screen = Screen.TribbleYard;
             }
-            if (blondeHairRect.Bottom >= window.Height || blondeHairRect.Top <= 0)
+            else if (screen == Screen.TribbleYard)
             {
-                blondeHairSpeed.Y *= -1;
-                backGroundColor = Color.LightSeaGreen;
-                blondeHairColor = Color.MediumPurple;
-            }
-            blondeHairRect.Y += (int)blondeHairSpeed.Y;
+                greyHairRect.X += (int)greyHairSpeed.X;
+                if (greyHairRect.Right >= window.Width || greyHairRect.Left <= 0)
+                {
+                    greyHairSpeed.X *= -1;
+                }
+                if (greyHairRect.Bottom >= window.Height || greyHairRect.Top <= 0)
+                {
+                    greyHairSpeed.Y *= -1;
+                }
+                greyHairRect.Y += (int)greyHairSpeed.Y;
 
-            brownHairRect.X += (int)brownHairSpeed.X;
-            if (brownHairRect.Right >= window.Width || brownHairRect.Left <= 0)
-            {
-                brownHairSpeed.X *= -1;
-                brownHairRect = new Rectangle(100, 300, 50, 50);
-                brownHairColor = Color.HotPink;
-            }
-            if (brownHairRect.Bottom >= window.Height || brownHairRect.Top <= 0)
-            {
-                brownHairSpeed.Y *= -1;
-                brownHairRect = new Rectangle(100, 300, 200, 200);
-                brownHairColor = Color.Blue;
-            }
-            brownHairRect.Y += (int)brownHairSpeed.Y;
+                blondeHairRect.X += (int)blondeHairSpeed.X;
+                if (blondeHairRect.Right >= window.Width || blondeHairRect.Left <= 0)
+                {
+                    blondeHairSpeed.X *= -1;
+                    backGroundColor = Color.MediumPurple;
+                    blondeHairColor = Color.LightSeaGreen;
+                }
+                if (blondeHairRect.Bottom >= window.Height || blondeHairRect.Top <= 0)
+                {
+                    blondeHairSpeed.Y *= -1;
+                    backGroundColor = Color.LightSeaGreen;
+                    blondeHairColor = Color.MediumPurple;
+                }
+                blondeHairRect.Y += (int)blondeHairSpeed.Y;
 
-            orangeHairRect.X += (int)orangeHairSpeed.X;
-            if (orangeHairRect.Right >= window.Width || orangeHairRect.Left <= 0)
-            {
-                orangeHairSpeed.X *= -1;
-                orangeHairRect = new Rectangle(1, 300, 100, 100);
+                brownHairRect.X += (int)brownHairSpeed.X;
+                if (brownHairRect.Right >= window.Width || brownHairRect.Left <= 0)
+                {
+                    brownHairSpeed.X *= -1;
+                    brownHairRect = new Rectangle(100, 300, 50, 50);
+                    brownHairColor = Color.HotPink;
+                }
+                if (brownHairRect.Bottom >= window.Height || brownHairRect.Top <= 0)
+                {
+                    brownHairSpeed.Y *= -1;
+                    brownHairRect = new Rectangle(100, 300, 200, 200);
+                    brownHairColor = Color.Blue;
+                }
+                brownHairRect.Y += (int)brownHairSpeed.Y;
+
+                orangeHairRect.X += (int)orangeHairSpeed.X;
+                if (orangeHairRect.Right >= window.Width || orangeHairRect.Left <= 0)
+                {
+                    orangeHairSpeed.X *= -1;
+                    orangeHairRect = new Rectangle(1, 300, 100, 100);
+                }
+                if (orangeHairRect.Bottom >= window.Height || orangeHairRect.Top <= 0)
+                {
+                    orangeHairSpeed.Y *= -1;
+                }
+                orangeHairRect.Y += (int)orangeHairSpeed.Y;
+
+                if (screen == Screen.TribbleYard)
+                {
+                    if (mouseState.RightButton == ButtonState.Pressed)
+                        screen = Screen.EndScreen;
+                }
+
             }
-            if (orangeHairRect.Bottom >= window.Height || orangeHairRect.Top <= 0)
-            {
-                orangeHairSpeed.Y *= -1;
-            }
-            orangeHairRect.Y += (int)orangeHairSpeed.Y;
 
             base.Update(gameTime);
         }
@@ -154,11 +199,25 @@ namespace Monogame_Animation
 
             _spriteBatch.Begin();
 
-            _spriteBatch.Draw(greyHairtexture, greyHairRect, Color.White);
-            _spriteBatch.Draw(blondeHairtexture, blondeHairRect, blondeHairColor);
-            _spriteBatch.Draw(brownHairtexture, brownHairRect, brownHairColor);
-            _spriteBatch.Draw(orangeHairtexture, orangeHairRect, Color.White);
+            if (screen == Screen.Intro)
+            {
+                _spriteBatch.Draw(tribbleIntroTexture, new Rectangle(0, 0, 800, 500), Color.White);
+                _spriteBatch.DrawString(titleFont, "Click Left button to move on!", new Vector2(325, 525), Color.White);
+            }
 
+            else if (screen == Screen.TribbleYard)
+            {
+                _spriteBatch.Draw(greyHairtexture, greyHairRect, Color.White);
+                _spriteBatch.Draw(blondeHairtexture, blondeHairRect, blondeHairColor);
+                _spriteBatch.Draw(brownHairtexture, brownHairRect, brownHairColor);
+                _spriteBatch.Draw(orangeHairtexture, orangeHairRect, Color.White);
+                _spriteBatch.DrawString(titleFont, "Click Right button to finish!", new Vector2(325, 525), Color.White);
+            }
+            else if (screen == Screen.EndScreen)
+            {
+                _spriteBatch.Draw(endScreenTexture, new Rectangle(0, 0, 800, 500), Color.White);
+            }
+            
             _spriteBatch.End();
 
             base.Draw(gameTime);
